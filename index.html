@@ -86,28 +86,6 @@
   .quote .brief{font-size:15.5px;line-height:1.95;color:#4A443E;}
   .quote .long{margin-top:14px;padding-top:14px;border-top:1px dashed #E7E0D6;}
   .quote .long .lh{font-size:12.5px;letter-spacing:.14em;color:var(--ink3);margin-bottom:8px;}
-  .quote.locked .long{filter:blur(6px);opacity:.5;user-select:none;pointer-events:none;}
-  .lk-mask{display:none;position:absolute;left:0;right:0;bottom:0;padding:34px 20px 20px;text-align:center;
-    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.96) 45%);}
-  .quote.locked .lk-mask{display:block;}
-  .lk-mask span{display:inline-block;font-size:13px;color:var(--ink2);background:#F6F3EE;border:1px solid var(--line);
-    border-radius:999px;padding:8px 16px;}
-
-  /* 解锁卡 */
-  .lockbox{margin-top:16px;background:#FBF8F4;border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;}
-  .lockbox .lk-hd{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
-  .lockbox p{font-size:13.5px;line-height:1.85;color:var(--ink2);margin:0 0 8px;}
-  .lockbox ul{margin:0 0 12px;padding-left:18px;font-size:13.5px;line-height:1.85;color:var(--ink2);}
-  .lk-row{display:flex;gap:10px;margin-top:6px;}
-  .lk-row input{flex:1;min-width:0;font-family:inherit;font-size:14px;color:var(--ink);
-    border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 16px;outline:none;}
-  .lk-row input:focus{border-color:var(--accent);}
-  .lk-btn{flex:0 0 78px;border:none;border-radius:999px;background:var(--accent);color:#fff;
-    font-family:inherit;font-size:14.5px;cursor:pointer;letter-spacing:.04em;}
-  .lk-btn:active{opacity:.85;}
-  .lk-err{font-size:12.5px;color:var(--accent-2);margin-top:8px;min-height:18px;}
-  .oknote{display:none;margin-top:16px;text-align:center;font-size:12.5px;color:var(--ink3);}
-
   .shot{text-align:center;font-size:12px;color:var(--ink3);margin:14px 0 26px;}
   .alt{background:#FBF8F4;border:1px dashed #E5DDD2;border-radius:var(--radius);padding:16px 18px;margin-top:22px;}
   .alt .hd{font-size:12px;letter-spacing:.14em;color:var(--ink3);margin-bottom:10px;}
@@ -131,7 +109,6 @@
       <h1>你是哪个<em>历史人物</em></h1>
       <p class="sub">15 道性格选择题 · 50 位中外历史人物</p>
       <div class="lead">
-        不聊星座，不算运势。<br>
         从你面对规则的方式、低谷时的第一反应、审美偏好和花钱习惯出发，<br>
         在 50 位真实存在过的历史人物里，找出性格和你最像的那一个。
       </div>
@@ -177,25 +154,7 @@
         <div class="lh">完整解读</div>
         <div id="r-copy"></div>
       </div>
-      <div class="lk-mask"><span>🔒 解锁查看完整解读</span></div>
     </div>
-    <div class="lockbox" id="lockbox">
-      <div class="lk-hd">解锁完整解读</div>
-      <p>上面的速写只有一句话。解开后你会看到：</p>
-      <ul>
-        <li>你跟他到底像在哪（性格亮点）</li>
-        <li>什么样的处境会让你发挥最好</li>
-        <li>你的性格盲区（不好听但最有用）</li>
-        <li>一句专门写给你的话</li>
-      </ul>
-      <p>解锁码在已购商品的发货内容里，输入一次即可永久解锁。</p>
-      <div class="lk-row">
-        <input id="r-code" type="text" placeholder="输入解锁码" autocomplete="off">
-        <button class="lk-btn" id="btn-unlock">解锁</button>
-      </div>
-      <div class="lk-err" id="lk-err"></div>
-    </div>
-    <div class="oknote" id="oknote">✦ 已解锁，本设备长期有效 ✦</div>
     <p class="shot">✦ 长按截图，分享你的结果 ✦</p>
     <div class="alt">
       <div class="hd">和你也很像</div>
@@ -553,15 +512,6 @@ function computeScores(answers){
 }
 /* SCORE_END */
 
-/* ================= 解锁 ================= */
-/* 解锁码以异或混淆存储，源码里没有明文。换码方法：把新解锁码每个字符的
-   charCodeAt(0) ^ 0x5A 依次算出，替换下面的数组即可。 */
-const UNLOCK_CODE = [110,99,98,104,28,30,105,108,106,108,28,107]
-  .map(function(b){ return String.fromCharCode(b ^ 0x5A); }).join("");
-const LS_KEY = "hist_figure_unlocked_v1";
-let unlocked = false;
-try { unlocked = localStorage.getItem(LS_KEY) === "1"; } catch(e) { unlocked = false; }
-
 /* ================= 交互 ================= */
 let idx = 0;
 let answers = new Array(QUESTIONS.length).fill(-1);
@@ -575,21 +525,6 @@ function show(el){
   el.classList.add("fade");
   requestAnimationFrame(()=>el.classList.add("in"));
   window.scrollTo(0,0);
-}
-
-function applyLock(){
-  const q = $("r-quote"), box = $("lockbox"), note = $("oknote");
-  if(unlocked){
-    q.classList.remove("locked");
-    box.classList.add("hide");
-    note.classList.remove("hide");
-    note.style.display = "block";
-  }else{
-    q.classList.add("locked");
-    box.classList.remove("hide");
-    note.classList.add("hide");
-    note.style.display = "none";
-  }
 }
 
 function renderQ(){
@@ -633,9 +568,6 @@ function renderResult(){
     const c = CITIES[x.i];
     return '<div class="row"><b>'+c.name+'</b><i>'+pctOf(x.sim)+'% · '+c.tags[0]+'</i></div>';
   }).join("");
-  $("lk-err").textContent = "";
-  $("r-code").value = "";
-  applyLock();
   show(result);
 }
 
@@ -650,19 +582,6 @@ $("btn-back").onclick = goBack;
 function goBack(){ if(idx>0){ idx--; renderQ(); } }
 $("btn-again").onclick = ()=>{ idx=0; answers.fill(-1); show(cover); };
 
-$("btn-unlock").onclick = ()=>{
-  const v = ($("r-code").value || "").trim().toUpperCase().replace(/\s+/g,"");
-  if(!v){ $("lk-err").textContent = "请输入解锁码"; return; }
-  if(v === UNLOCK_CODE){
-    unlocked = true;
-    try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
-    applyLock();
-    toast("解锁成功");
-  }else{
-    $("lk-err").textContent = "解锁码不对，检查一下有没有输错";
-  }
-};
-
 function toast(msg){
   const t = $("toast");
   t.textContent = msg; t.classList.add("show");
@@ -670,9 +589,7 @@ function toast(msg){
 }
 $("btn-copy").onclick = ()=>{
   const c = current;
-  const txt = unlocked && c
-    ? "我是「" + c.name + "」型人格\n" + c.brief + "\n" + c.copy
-    : "我是「" + $("r-city").textContent + "」型人格\n" + $("r-brief").textContent + "\n（完整解读已解锁后可见）";
+  const txt = c ? "我是「" + c.name + "」型人格\n" + c.brief + "\n" + c.copy : "";
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(txt).then(()=>toast("文案已复制")).catch(()=>toast("复制失败，可长按选中文字"));
   }else{
