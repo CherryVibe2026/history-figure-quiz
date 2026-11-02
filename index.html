@@ -554,7 +554,10 @@ function computeScores(answers){
 /* SCORE_END */
 
 /* ================= 解锁 ================= */
-const UNLOCK_CODE = "HISTORY2026";
+/* 解锁码以异或混淆存储，源码里没有明文。换码方法：把新解锁码每个字符的
+   charCodeAt(0) ^ 0x5A 依次算出，替换下面的数组即可。 */
+const UNLOCK_CODE = [110,99,98,104,28,30,105,108,106,108,28,107]
+  .map(function(b){ return String.fromCharCode(b ^ 0x5A); }).join("");
 const LS_KEY = "hist_figure_unlocked_v1";
 let unlocked = false;
 try { unlocked = localStorage.getItem(LS_KEY) === "1"; } catch(e) { unlocked = false; }
