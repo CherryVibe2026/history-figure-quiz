@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>你是哪个历史人物｜15 题测出你和谁最像</title>
+<style>
+  :root{
+    --bg:#F6F3EE;        /* 宣纸底 */
+    --card:#FFFFFF;
+    --ink:#3A3630;
+    --ink2:#857B70;
+    --ink3:#A69C90;
+    --line:#E7E0D6;
+    --accent:#7E8C93;    /* 黛青灰 */
+    --accent-soft:#E9EDEE;
+    --accent-2:#C08A7D;  /* 朱砂粉 */
+    --radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    font-size:16px;line-height:1.7;letter-spacing:.02em;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px;margin:0 auto;padding:0 20px 48px;}
+
+  /* 封面 */
+  .cover{padding-top:64px;text-align:center;}
+  .cover .eyebrow{display:inline-block;font-size:12px;letter-spacing:.18em;color:var(--accent-2);
+    border:1px solid #E9DCD4;border-radius:999px;padding:5px 14px;margin-bottom:22px;background:#FBF8F4;}
+  .cover h1{font-size:28px;line-height:1.5;font-weight:600;margin:0 0 6px;letter-spacing:.04em;}
+  .cover h1 em{font-style:normal;color:var(--accent);}
+  .cover .sub{font-size:14px;color:var(--ink2);margin:0 0 26px;}
+  .cover .lead{text-align:left;font-size:14.5px;color:var(--ink2);line-height:1.9;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:22px;}
+  .names{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:22px;}
+  .names span{font-size:12px;color:var(--ink2);background:#F1ECE5;border-radius:999px;padding:5px 11px;}
+  .meta{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:30px;}
+  .meta span{font-size:12px;color:var(--ink2);background:#F1ECE5;border-radius:999px;padding:5px 12px;}
+  .foot{text-align:center;font-size:12px;color:var(--ink3);margin-top:18px;}
+
+  /* 按钮 */
+  .btn{display:block;width:100%;border:none;border-radius:999px;cursor:pointer;font-family:inherit;
+    font-size:16px;letter-spacing:.06em;padding:15px 0;background:var(--accent);color:#fff;font-weight:500;}
+  .btn:active{opacity:.85;}
+  .btn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--line);}
+  .btn:disabled{background:#DCD6CF;color:#fff;cursor:default;}
+
+  /* 答题 */
+  .topbar{padding-top:26px;}
+  .ptop{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .ptop .num{font-size:12px;color:var(--ink3);letter-spacing:.14em;}
+  .ptop .back{font-size:13px;color:var(--ink3);cursor:pointer;border:none;background:none;font-family:inherit;padding:0;}
+  .bar{height:4px;background:#EDE7E0;border-radius:999px;overflow:hidden;}
+  .bar i{display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,#9FAEB2,var(--accent));transition:width .28s ease;}
+  .qtitle{font-size:20px;line-height:1.6;font-weight:600;margin:34px 0 4px;letter-spacing:.03em;}
+  .qhint{font-size:13px;color:var(--ink3);margin:0 0 24px;}
+  .opts{display:flex;flex-direction:column;gap:12px;}
+  .opt{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:15px 16px;cursor:pointer;font-size:15px;line-height:1.65;color:var(--ink);
+    transition:background .18s ease,border-color .18s ease;}
+  .opt .dot{flex:0 0 18px;width:18px;height:18px;border-radius:50%;border:1px solid #DAD3CB;margin-top:4px;position:relative;}
+  .opt .txt{flex:1;}
+  .opt.on{border-color:var(--accent);background:var(--accent-soft);}
+  .opt.on .dot{border-color:var(--accent);background:var(--accent);}
+  .opt.on .dot:after{content:"";position:absolute;left:5px;top:5px;width:6px;height:6px;border-radius:50%;background:#fff;}
+  .nav{display:flex;gap:12px;margin-top:28px;}
+  .nav .btn{flex:1;}
+  .nav .btn.sm{flex:0 0 96px;}
+
+  /* 结果 */
+  .rtop{text-align:center;padding-top:56px;}
+  .rtop .eyebrow{font-size:12px;letter-spacing:.18em;color:var(--ink3);}
+  .city{font-size:36px;font-weight:600;letter-spacing:.06em;margin:10px 0 2px;}
+  .citysub{font-size:13px;color:var(--ink2);letter-spacing:.08em;}
+  .pill{display:inline-block;margin-top:16px;font-size:13px;color:var(--accent);
+    background:var(--accent-soft);border-radius:999px;padding:6px 16px;letter-spacing:.06em;}
+  .tags{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:18px 0 26px;}
+  .tags span{font-size:12.5px;color:var(--ink2);background:#F1ECE5;border-radius:999px;padding:6px 13px;}
+  .quote{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:24px 22px;font-size:15px;line-height:2;color:#4A443E;overflow:hidden;}
+  .quote .hd{font-size:12px;letter-spacing:.16em;color:var(--accent-2);margin-bottom:12px;}
+  .quote .brief{font-size:15.5px;line-height:1.95;color:#4A443E;}
+  .quote .long{margin-top:14px;padding-top:14px;border-top:1px dashed #E7E0D6;}
+  .quote .long .lh{font-size:12.5px;letter-spacing:.14em;color:var(--ink3);margin-bottom:8px;}
+  .quote.locked .long{filter:blur(6px);opacity:.5;user-select:none;pointer-events:none;}
+  .lk-mask{display:none;position:absolute;left:0;right:0;bottom:0;padding:34px 20px 20px;text-align:center;
+    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.96) 45%);}
+  .quote.locked .lk-mask{display:block;}
+  .lk-mask span{display:inline-block;font-size:13px;color:var(--ink2);background:#F6F3EE;border:1px solid var(--line);
+    border-radius:999px;padding:8px 16px;}
+
+  /* 解锁卡 */
+  .lockbox{margin-top:16px;background:#FBF8F4;border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;}
+  .lockbox .lk-hd{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .lockbox p{font-size:13.5px;line-height:1.85;color:var(--ink2);margin:0 0 8px;}
+  .lockbox ul{margin:0 0 12px;padding-left:18px;font-size:13.5px;line-height:1.85;color:var(--ink2);}
+  .lk-row{display:flex;gap:10px;margin-top:6px;}
+  .lk-row input{flex:1;min-width:0;font-family:inherit;font-size:14px;color:var(--ink);
+    border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 16px;outline:none;}
+  .lk-row input:focus{border-color:var(--accent);}
+  .lk-btn{flex:0 0 78px;border:none;border-radius:999px;background:var(--accent);color:#fff;
+    font-family:inherit;font-size:14.5px;cursor:pointer;letter-spacing:.04em;}
+  .lk-btn:active{opacity:.85;}
+  .lk-err{font-size:12.5px;color:var(--accent-2);margin-top:8px;min-height:18px;}
+  .oknote{display:none;margin-top:16px;text-align:center;font-size:12.5px;color:var(--ink3);}
+
+  .shot{text-align:center;font-size:12px;color:var(--ink3);margin:14px 0 26px;}
+  .alt{background:#FBF8F4;border:1px dashed #E5DDD2;border-radius:var(--radius);padding:16px 18px;margin-top:22px;}
+  .alt .hd{font-size:12px;letter-spacing:.14em;color:var(--ink3);margin-bottom:10px;}
+  .alt .row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:14.5px;}
+  .alt .row i{font-style:normal;font-size:12.5px;color:var(--ink3);}
+  .acts{display:flex;flex-direction:column;gap:12px;margin-top:26px;}
+  .toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);background:rgba(58,54,48,.92);
+    color:#fff;font-size:13px;padding:9px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .toast.show{opacity:1;}
+  .fade{opacity:0;transition:opacity .22s ease;}
+  .fade.in{opacity:1;}
+  .hide{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="s-cover">
+    <div class="cover">
+      <div class="eyebrow">HISTORY · 人物匹配</div>
+      <h1>你是哪个<em>历史人物</em></h1>
+      <p class="sub">15 道性格选择题 · 50 位中外历史人物</p>
+      <div class="lead">
+        不聊星座，不算运势。<br>
+        从你面对规则的方式、低谷时的第一反应、审美偏好和花钱习惯出发，<br>
+        在 50 位真实存在过的历史人物里，找出性格和你最像的那一个。
+      </div>
+      <div class="names">
+        <span>李白</span><span>苏轼</span><span>武则天</span><span>嵇康</span><span>李清照</span>
+        <span>达·芬奇</span><span>梵高</span><span>香奈儿</span><span>卡夫卡</span><span>王尔德</span>
+      </div>
+      <div class="meta"><span>15 题</span><span>约 2 分钟</span><span>中国 25 + 世界 25</span></div>
+      <button class="btn" id="btn-start">开始测试</button>
+      <p class="foot">凭直觉选，第一反应通常最准</p>
+    </div>
+  </section>
+
+  <section id="s-quiz" class="hide">
+    <div class="topbar">
+      <div class="ptop">
+        <span class="num" id="qnum">01 / 15</span>
+        <button class="back hide" id="btn-prev">← 上一题</button>
+      </div>
+      <div class="bar"><i id="qbar"></i></div>
+    </div>
+    <h2 class="qtitle" id="qtitle"></h2>
+    <p class="qhint">单选，选一个最接近你的</p>
+    <div class="opts" id="opts"></div>
+    <div class="nav">
+      <button class="btn ghost sm hide" id="btn-back">上一题</button>
+      <button class="btn" id="btn-next" disabled>下一题</button>
+    </div>
+  </section>
+
+  <section id="s-result" class="hide">
+    <div class="rtop">
+      <div class="eyebrow">YOUR HISTORICAL FIGURE</div>
+      <div class="city" id="r-city"></div>
+      <div class="citysub" id="r-sub"></div>
+      <div class="pill" id="r-pill"></div>
+      <div class="tags" id="r-tags"></div>
+    </div>
+    <div class="quote" id="r-quote">
+      <div class="hd">人物速写</div>
+      <div class="brief" id="r-brief"></div>
+      <div class="long">
+        <div class="lh">完整解读</div>
+        <div id="r-copy"></div>
+      </div>
+      <div class="lk-mask"><span>🔒 解锁查看完整解读</span></div>
+    </div>
+    <div class="lockbox" id="lockbox">
+      <div class="lk-hd">解锁完整解读</div>
+      <p>上面的速写只有一句话。解开后你会看到：</p>
+      <ul>
+        <li>你跟他到底像在哪（性格亮点）</li>
+        <li>什么样的处境会让你发挥最好</li>
+        <li>你的性格盲区（不好听但最有用）</li>
+        <li>一句专门写给你的话</li>
+      </ul>
+      <p>解锁码在已购商品的发货内容里，输入一次即可永久解锁。</p>
+      <div class="lk-row">
+        <input id="r-code" type="text" placeholder="输入解锁码" autocomplete="off">
+        <button class="lk-btn" id="btn-unlock">解锁</button>
+      </div>
+      <div class="lk-err" id="lk-err"></div>
+    </div>
+    <div class="oknote" id="oknote">✦ 已解锁，本设备长期有效 ✦</div>
+    <p class="shot">✦ 长按截图，分享你的结果 ✦</p>
+    <div class="alt">
+      <div class="hd">和你也很像</div>
+      <div id="r-alt"></div>
+    </div>
+    <div class="acts">
+      <button class="btn" id="btn-again">重新测试</button>
+      <button class="btn ghost" id="btn-copy">复制文案</button>
+    </div>
+  </section>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= 题目 ================= */
+const QUESTIONS = [
+  { q:"你最理想的周末是什么样的？", o:[
+    { t:"一个人待着，看书发呆，谁也别来找我", w:{solo:3,calm:1} },
+    { t:"约三五好友，吃点喝点，聊到半夜", w:{social:3,humor:1} },
+    { t:"出门乱逛，去没去过的地方，不看攻略", w:{curious:3,wild:2} },
+    { t:"把下周的事先安排好，心里才踏实", w:{order:3,prag:1} }
+  ]},
+  { q:"遇到一条你觉得不合理的规定，你会？", o:[
+    { t:"照做，省得惹麻烦", w:{prag:2,calm:1,rebel:-2} },
+    { t:"先遵守，找机会私下提意见", w:{prag:2,order:2,rebel:-1} },
+    { t:"能绕就绕，不硬碰，把事办了就行", w:{wild:2,prag:1,rebel:1} },
+    { t:"直接提出来，不合理就是不合理", w:{rebel:3,ideal:2,social:1} }
+  ]},
+  { q:"朋友私下会怎么形容你？", o:[
+    { t:"靠谱，事情交给你就放心了", w:{order:2,rigor:2,prag:2} },
+    { t:"有趣，跟你在一起不无聊", w:{humor:3,social:2,curious:1} },
+    { t:"安静，不太知道你在想什么", w:{solo:3,lone:1,social:-1} },
+    { t:"较真，一点小事也要弄明白", w:{rigor:3,curious:2} }
+  ]},
+  { q:"接到一件新任务，你的第一反应是？", o:[
+    { t:"先列计划，把步骤拆清楚", w:{order:3,rigor:2} },
+    { t:"等状态，灵感来了一口气做完", w:{aesth:2,wild:2,solo:1} },
+    { t:"边做边改，摸着石头过河", w:{prag:2,curious:1,wild:1} },
+    { t:"要么不做，做就做到最好", w:{grit:3,drive:2,rigor:1} }
+  ]},
+  { q:"掉进低谷的时候，你通常？", o:[
+    { t:"自己消化，不太想麻烦别人", w:{solo:2,lone:2,grit:1} },
+    { t:"找信任的人聊一聊", w:{social:2,warm:2} },
+    { t:"硬扛，谁也不说，该干嘛干嘛", w:{grit:3,prag:1,lone:1} },
+    { t:"换个角度想开，甚至能自嘲一下", w:{humor:3,calm:2} }
+  ]},
+  { q:"一笔不算少的意外之财，你会？", o:[
+    { t:"存起来，安全感最重要", w:{prag:2,order:2,calm:1} },
+    { t:"花在体验上，旅行、演出、好吃的", w:{aesth:2,curious:2,wild:1} },
+    { t:"为喜欢的东西一掷千金，贵就贵了", w:{aesth:3,wild:2} },
+    { t:"分几份放好，日常开销先留足", w:{order:3,prag:2} }
+  ]},
+  { q:"在你心里，“成功”更接近哪个？", o:[
+    { t:"做成了自己真正认可的一件事", w:{ideal:3,grit:2,solo:1} },
+    { t:"被很多人记住，有影响过别人", w:{drive:3,social:2,warm:1} },
+    { t:"过得舒服自在，不亏待自己", w:{calm:3,prag:1,wild:1} },
+    { t:"在某个领域说了算，有话语权", w:{drive:3,prag:2,rigor:1} }
+  ]},
+  { q:"面对专家或者权威的说法，你？", o:[
+    { t:"基本信，专业的事交给专业的人", w:{prag:2,order:1,rebel:-2} },
+    { t:"先信，但心里留一点疑问", w:{rigor:2,curious:2} },
+    { t:"先质疑，自己查一遍再说", w:{rebel:2,rigor:2,curious:2} },
+    { t:"不太在意，我只信自己试过的", w:{wild:2,rebel:1,prag:1} }
+  ]},
+  { q:"你的想法和灵感，通常从哪来？", o:[
+    { t:"独处的时候，脑子里自己冒出来", w:{solo:3,aesth:2,feel:1} },
+    { t:"大量输入，看书看片看别人怎么做", w:{curious:3,rigor:1} },
+    { t:"动手折腾，做着做着就有了", w:{prag:2,curious:2,wild:1} },
+    { t:"跟人聊，越聊越清楚", w:{social:3,humor:1} }
+  ]},
+  { q:"情绪不好的时候，你最常做的是？", o:[
+    { t:"写下来，或者发一条仅自己可见的", w:{feel:3,solo:2,aesth:1} },
+    { t:"憋着，过两天自己就好了", w:{lone:2,grit:2,social:-1} },
+    { t:"找人讲出来，讲完就好多了", w:{social:3,warm:2} },
+    { t:"把它变成点什么，画、写、做出来", w:{aesth:3,feel:2,curious:1} }
+  ]},
+  { q:"关于“稳定”，你的真实想法是？", o:[
+    { t:"很重要，稳定了才有底气做别的", w:{order:3,prag:2} },
+    { t:"无所谓，有变化才有意思", w:{wild:3,curious:2} },
+    { t:"有点窒息，太稳定我会发慌", w:{wild:2,rebel:1,solo:1} },
+    { t:"想要，但怕稳定之后变得无聊", w:{calm:2,aesth:1,order:1} }
+  ]},
+  { q:"在人群里，你通常是？", o:[
+    { t:"很在意私人空间，社交完要回血", w:{solo:3,calm:1,social:-1} },
+    { t:"谁都能聊两句，气氛组担当", w:{social:3,humor:2} },
+    { t:"只跟几个人深交，其余礼貌就好", w:{solo:2,feel:2,rigor:1} },
+    { t:"常常迁就别人，不太会拒绝", w:{warm:3,social:1,rebel:-2} }
+  ]},
+  { q:"一件需要长期投入的事，你能坚持吗？", o:[
+    { t:"能，而且很享受这种沉进去的感觉", w:{grit:3,solo:2,rigor:1} },
+    { t:"能，但会累，需要有人推我一把", w:{grit:2,social:1,prag:1} },
+    { t:"比较难，新鲜感过了就想换坑", w:{curious:3,wild:2,order:-2} },
+    { t:"只要我觉得有意义，就能一直做", w:{ideal:3,grit:2} }
+  ]},
+  { q:"审美上，你更容易被什么打动？", o:[
+    { t:"极简、克制、留白", w:{calm:2,aesth:2,order:1} },
+    { t:"浓烈、浪漫、情绪饱满", w:{feel:3,aesth:3} },
+    { t:"旧的、有岁月痕迹的东西", w:{lone:2,aesth:2,feel:1} },
+    { t:"新奇、怪、没见过的", w:{curious:3,wild:2,rebel:1} }
+  ]},
+  { q:"如果能穿越一次，你最想去哪儿？", o:[
+    { t:"中国古代，江湖、诗酒、山水", w:{intl:-3,aesth:1,wild:1} },
+    { t:"欧洲文艺复兴，画室与剧场", w:{intl:3,aesth:2,curious:1} },
+    { t:"近代科学革命现场，实验室与星空", w:{intl:3,curious:2,rigor:1} },
+    { t:"都行，哪个时代有意思就去哪", w:{curious:1,wild:1} }
+  ]}
+];
+
+/* ================= 结果库：50 位历史人物 =================
+   name / sub / tags(3) / v 特质向量 / brief 免费速写 / copy 解锁后完整解读
+   intl:1 标记世界人物，配合 regionGate 做中国/世界的硬门槛 */
+const CITIES = [
+  { name:"李白", sub:"唐代 · 诗人", tags:["浪漫到没边","天才型选手","情绪浓度高"],
+    v:{wild:3,aesth:3,humor:2,social:2,ideal:2,drive:-1,order:-2,rigor:-2},
+    brief:"喝到高兴就写诗，写高兴了接着喝。",
+    copy:"「人生得意须尽欢」基本就是他的使用说明书。他一辈子没怎么正经上过班，走到哪儿喝到哪儿，情绪来得快、去得也快，随手一句就是千年名句。你跟他一样，灵感比计划多，状态好的时候谁都拦不住，朋友圈文案永远比别人有画面感。你适合那种允许你即兴发挥的环境，被塞进流程和 KPI 里会枯萎。小缺点说重一点：三天热度是常态，答应的事转头就忘，钱也跟着情绪走，月底看着账单会愣一下。" },
+  { name:"杜甫", sub:"唐代 · 诗人", tags:["操心命","共情过剩","越难越扛"],
+    v:{feel:3,lone:2,warm:3,grit:3,prag:2,social:-1,humor:-2},
+    brief:"一辈子操心，操心自己，也操心天下。",
+    copy:"他这辈子写的最多的不是风景，是别人的苦。茅屋被秋风吹破了，他想的还是「安得广厦千万间」。你是默认替别人着想的那类人，共情能力强到有点累——别人一句话的语气不对，你会先在心里过三遍。你适合做能真实帮到人的事，那种纯靠包装的活儿你会做得很别扭。小缺点：容易把别人的情绪背在自己身上，开心的时候也在隐隐担心什么，休息时会有负罪感。" },
+  { name:"苏轼", sub:"北宋 · 文人", tags:["抗打击满分","吃货","底色乐观"],
+    v:{humor:3,aesth:3,grit:3,warm:2,prag:2,social:2,wild:1,lone:-1},
+    brief:"被贬到哪儿，就在哪儿研究吃什么。",
+    copy:"黄州发明东坡肉，惠州吃羊蝎子，儋州生蚝吃到上头，还写信叮嘱儿子别对外说、怕人跑来抢。他把一贬再贬的人生过成了美食攻略。你是那种倒霉了还能找到乐子的人，抗打击能力在人群里排前几名，朋友出事第一个想到找你开导。你适合节奏有起伏、能接触不同人和事的工作，一眼望到头的岗位会让你发闷。小缺点：嘴上豁达，其实熬夜想事情的时候比谁都多，白天笑得越大声，晚上越容易翻旧账。" },
+  { name:"陶渊明", sub:"东晋 · 诗人", tags:["躺平鼻祖","不爱被管","宁可少赚"],
+    v:{calm:3,wild:2,solo:2,aesth:2,prag:1,drive:-3,social:-2,order:-1},
+    brief:"这班上得没意思，我走了。",
+    copy:"辞官的理由写得很雅：「不为五斗米折腰」。翻译成今天的话就是：这份工作让我不舒服，不干了。回去种田，草长得比豆苗高，也照样写「悠然见南山」。你骨子里抗拒被安排，宁可少赚点也要睡到自然醒，对「应该怎样」这套说辞天然免疫。你适合自由度高的工作，被考勤和汇报绑住会持续掉血。小缺点：理想很丰满，存款很骨感，偶尔半夜也会偷偷焦虑；而且你太不爱争，机会常常是别人替你拿走的。" },
+  { name:"王维", sub:"唐代 · 诗人", tags:["安静得发光","审美极好","电量很低"],
+    v:{calm:3,solo:3,aesth:3,feel:2,order:1,social:-2,drive:-2,rebel:-1},
+    brief:"一个人在山里也能待一整天。",
+    copy:"「行到水穷处，坐看云起时」——他后半生基本住在辋川，弹琴、画画、写诗，官也做，心不在。他写的山水之所以好看，是因为他真的能坐得住。你喜欢安静，社交电量消耗得特别快，一场饭局回来需要半天恢复。你适合能独立完成的深度工作，开放式工位和不停开会是你的天敌。小缺点：话太少，容易被误认为高冷、不好合作，其实你只是不想解释；需要你主动争取的时候，你往往先退了。" },
+  { name:"李清照", sub:"宋代 · 词人", tags:["感受力满分","爱复盘","外冷内热"],
+    v:{feel:3,aesth:3,lone:2,rigor:2,solo:1,warm:1,humor:-1,social:-1},
+    brief:"写得出「知否知否」，也写得出「凄凄惨惨戚戚」。",
+    copy:"她的词就是一部情绪日记：少女时清亮明快，南渡之后句句扎心。她还较真，写了一篇《词论》，把当时几乎所有名家都点评了一遍，一个不留情。你感受力极强，一句话的语气、一个没回的消息，都能在心里琢磨半天。你适合需要细腻体察的事，文字、设计、用户研究这类活儿你会做得比别人深。小缺点：容易内耗，别人早忘了的事你还在复盘；情绪上来的时候会切断联系，事后又后悔。" },
+  { name:"辛弃疾", sub:"南宋 · 词人", tags:["心里有火","受不了糊弄","行动派"],
+    v:{grit:3,drive:2,ideal:3,wild:2,rigor:1,calm:-2,solo:-2},
+    brief:"能写词，也真的能带兵。",
+    copy:"年轻时带几十人冲进几万人的敌营抓叛徒，回来写「醉里挑灯看剑」。他一辈子想北伐，一辈子没被允许，词却写得比谁都硬。你是那种心里憋着一口气的人，看不惯糊弄，受不了「差不多就行」。你适合有明确目标、能真刀真枪出结果的事，纯协调类的岗位会把你憋坏。小缺点：脾气来得快，耐心少，开会时遇到推诿会当场翻脸；而且你不太会表达疲惫，往往是身体先抗议。" },
+  { name:"白居易", sub:"唐代 · 诗人", tags:["最接地气","老好人","讲人话"],
+    v:{prag:3,warm:3,social:2,humor:1,order:1,wild:-1,lone:-2},
+    brief:"写完诗要念给老奶奶听，听不懂就改。",
+    copy:"他是古代最不端着的天才：写诗要念给不识字的老人听，听不懂就重写；当官修了西湖白堤，走的时候把积蓄全留在了地方库房。你喜欢把复杂的事讲明白，人缘通常不错，团队里你是那种没人记恨的人。你适合面向具体的人做事，教育、服务、运营、医护这类能直接看到反馈的方向。小缺点：太想让所有人都舒服，常常委屈自己；拒绝别人之后你会比对方还难受，然后半夜补一句「要不还是我来吧」。" },
+  { name:"王阳明", sub:"明代 · 思想家", tags:["知行合一","对自己狠","落地能力强"],
+    v:{rigor:2,grit:3,ideal:2,prag:2,order:2,solo:1,wild:-2},
+    brief:"想的要做到，做不到等于没想。",
+    copy:"被贬到贵州龙场，在石洞里想通了「心即理」，后来带兵平叛、讲学育人，文武都来得。他最烦空谈：知而不行，只是未知。你是那种会逼自己把想法落地的人，定下来的事基本能做到，别人觉得你靠谱甚至有点可怕。你适合有实权、能从头负责到尾的角色，只让你提建议不让你执行会很煎熬。小缺点：对自己高标准，对身边人也容易高标准；亲密关系里你会不自觉地纠正对方，然后纳闷为什么对方累了。" },
+  { name:"庄子", sub:"战国 · 思想家", tags:["看得最开","不爱争","脑洞清奇"],
+    v:{wild:3,calm:3,solo:2,curious:2,aesth:2,ideal:2,order:-3,drive:-3},
+    brief:"老婆去世他鼓盆而歌，不是无情，是想明白了。",
+    copy:"楚王请他当官，他说：我宁可当一只在泥里摇尾巴的乌龟。他写蝴蝶梦、写鲲鹏，几千年后读起来还是脑洞清奇。你是那种看得开的人，对「大家都这样」这套说法免疫力很强，别人焦虑的事你常常觉得「那又怎样」。你适合宽松、允许发呆和走神的生活方式，被管太死会失去灵气。小缺点：太看得开，有时候该争取的也懒得争，事后看着别人拿走机会才说一句「其实我也能」。" },
+  { name:"孔子", sub:"春秋 · 思想家", tags:["理想主义","爱讲道理","韧性惊人"],
+    v:{order:3,rigor:2,ideal:3,warm:2,prag:2,drive:1,wild:-2,rebel:-2},
+    brief:"周游列国十四年，一路被拒一路讲课。",
+    copy:"带着学生跑遍诸侯国，没人真用他，被围过、断过粮，六十多岁还在路上。他是古代最执着的教育者，相信「做对的事」比「做成的事」重要。你身上有一套自己的原则，不太会因为现实压力改口，身边人谈起你会说「这人靠谱」。你适合有长期价值的方向，教育、内容、公益、管理都行。小缺点：有点爱讲道理，别人只是想被安慰的时候你会开始分析；而且你对不守规矩的人容忍度很低，容易生闷气。" },
+  { name:"老子", sub:"春秋 · 思想家", tags:["以退为进","不爱争","话少但准"],
+    v:{calm:3,solo:3,curious:2,ideal:2,wild:1,social:-3,drive:-3,prag:-1},
+    brief:"《道德经》五千字，核心就一句：别使劲。",
+    copy:"他主张「无为」，不是躺平，是不硬来——水往下走，反而什么都能穿过去。他一辈子留下的文字不多，但每一句都能被后人反复引用。你是那种不爱争、但看得比谁都清楚的人，开会时说得最少，散会后大家才发现你说的那句最准。你适合做判断和把关的事，冲锋陷阵不是你的位置。小缺点：太不爱争，好处到嘴边也可能被别人拿走；而且你不爱解释自己，被误解的时候往往不辩解，然后就真的被误解了。" },
+  { name:"诸葛亮", sub:"三国 · 名相", tags:["定海神针","事必躬亲","操心到死"],
+    v:{order:3,rigor:3,grit:3,prag:3,drive:2,ideal:2,humor:-2,wild:-2},
+    brief:"事无巨细都要过问，最后是被自己累死的。",
+    copy:"罚二十军棍以上的事都要亲自批，打仗时连营中事务都管，五十四岁累死在五丈原。他是团队里最让人安心的那种人：方案、备份、应急预案全在他脑子里。你跟他一样，交出去的东西一定要自己检查一遍才放心，别人说「你太操心了」，你说「我不操心谁操心」。你适合当那个兜底的人，项目离了你会明显失控。小缺点：不放心交给别人，什么活都自己扛，累还不敢说；长期下来身边的人会以为你不需要帮忙。" },
+  { name:"曹操", sub:"三国 · 枭雄", tags:["目标感极强","不看脸色","能屈能伸"],
+    v:{drive:3,prag:3,grit:2,rigor:1,rebel:2,warm:-2,calm:-2},
+    brief:"宁可我负天下人——狠，但他确实把事做成了。",
+    copy:"他写诗写得极好，打仗打得极狠，用人不看出身只看能不能干，犯错也能当场认。他不在乎别人怎么评价自己，只在乎事情有没有推进。你目标感强，不太在意外界眼光，别人还在犹豫的时候你已经动手了。你适合做要拍板、要扛责的位置，纯执行岗会让你觉得浪费。小缺点：太重结果，推进的时候容易伤人；事后你心里知道，但不太愿意道歉，久了身边会只剩能用的人、没有能说的人。" },
+  { name:"嵇康", sub:"三国 · 竹林七贤", tags:["不合群但自洽","有骨气","宁折不弯"],
+    v:{rebel:3,wild:3,aesth:3,solo:2,humor:1,order:-3,prag:-2,social:-2},
+    brief:"别人来请他当官，他在树下打铁，头都不抬。",
+    copy:"司马氏请他出仕，他写了封《与山巨源绝交书》，公开说不去；最后被处死前，从容弹了一曲《广陵散》，说从此绝矣。他是那种「不合群但很自洽」的人，不是反社会，是不愿意为五斗米改口。你身上有很清楚的一条线，越过就不行，哪怕代价很大。你适合靠专业吃饭、不必讨好谁的活法，自由职业、技术、创作这类方向。小缺点：太不将就，现实里确实会吃亏；而且你不屑解释，常常被贴上「难搞」的标签。" },
+  { name:"武则天", sub:"唐代 · 女皇", tags:["掌控欲强","上升野心","不太服命"],
+    v:{drive:3,prag:3,grit:3,rigor:2,order:2,warm:-2,calm:-2,rebel:1},
+    brief:"从才人到皇帝，她用了半个世纪。",
+    copy:"十四岁入宫，六十七岁称帝，中间被送到尼姑庵待过，也亲手处理过无数对手。她很清楚自己要什么，也舍得为此付出代价，最后留了一块无字碑让人随便评说。你有很强的掌控欲和上升欲，不太信命，别人觉得不可能的事你会先算一遍再说。你适合有上升空间、能拿结果的赛道，稳定但没天花板的岗位留不住你。小缺点：太能扛，很少示弱，身边人有时候会怕你；而且你习惯一个人拿主意，真遇到事时身边没人敢劝。" },
+  { name:"张岱", sub:"明末 · 文人", tags:["最会生活","讲究到骨子里","细节控"],
+    v:{aesth:3,curious:3,solo:2,feel:2,humor:2,prag:-2,drive:-2,order:-1},
+    brief:"把吃喝玩乐写成了文学。",
+    copy:"《湖心亭看雪》只有一百多字，《陶庵梦忆》里写灯、写茶、写戏、写蟹会——他是古代最会生活的人，讲究到骨子里：喝什么水、用什么器、什么时候看雪，都有讲究。你对细节和质感有执念，能一眼看出哪里不对劲，别人说你讲究，你觉得那叫基本标准。你适合做需要品位的活儿，内容、选品、空间、餐饮都行。小缺点：讲究过头会变挑剔，容易因为不将就而错过；而且你对钱没什么概念，喜欢的东西买起来不太看价。" },
+  { name:"徐霞客", sub:"明代 · 旅行家", tags:["脚野","受不了重复","好奇心驱动"],
+    v:{curious:3,wild:3,grit:3,solo:2,prag:1,order:-2,social:-1,drive:-1},
+    brief:"三十多年不上班，专门爬山。",
+    copy:"二十二岁出门，走了三十多年，几次遇盗、断粮、摔下山坡，还接着走，留下六十多万字的游记。他是古代版硬核旅行博主，而且是不带货的那种。你在一个地方待久了会浑身难受，总想去看看，对重复的日子耐受度很低。你适合能移动、有新鲜刺激的工作，出差、外派、田野、采访这类都合你。小缺点：很难稳定下来，安定期一长就开始躁；而且你出发前不爱做攻略，经常为随性买单。" },
+  { name:"王羲之", sub:"东晋 · 书法家", tags:["审美直觉好","状态型选手","会玩"],
+    v:{aesth:3,solo:2,humor:2,social:2,feel:2,order:1,rigor:1,drive:-2},
+    brief:"喝醉了写《兰亭序》，醒来再也写不出第二遍。",
+    copy:"兰亭雅集那天，众人流觞曲水，他乘兴挥毫写了《兰亭序》，后来自己又写了几十遍都写不出那个味道。他是天才，也是个很会玩的人，爱鹅爱到给人抄经换鹅。你有很强的审美直觉，状态来了作品质量极高，别人问你怎么做的你常常说不清。你适合靠灵感和手感吃饭的事，被要求稳定产出会让你很痛苦。小缺点：状态不稳，不在状态的时候什么都不想干，然后开始怀疑自己；deadline 是你唯一有效的解药。" },
+  { name:"唐寅", sub:"明代 · 才子", tags:["有趣有才","爱现","不太管钱"],
+    v:{humor:3,aesth:3,wild:2,social:2,feel:2,order:-2,rigor:-2,prag:-2},
+    brief:"风流倜傥是真的，大半生也真的很倒霉。",
+    copy:"历史上他没有点秋香：解元考得好好的，卷进舞弊案，从此断绝仕途，靠卖画为生，晚年很穷。但你记住的他永远是那个风流才子——说明他的形象管理确实做得好。你有趣、有才、爱现，人群里最亮的那个常常是你。你适合需要表现力和创意的场合，闷头干活的岗位会浪费你。小缺点：不太会管钱，也不太会管自己；情绪好的时候对谁都好，情绪差的时候会突然消失，让人摸不着头脑。" },
+  { name:"司马迁", sub:"汉代 · 史学家", tags:["死磕到底","苦都自己咽","认准就不改"],
+    v:{grit:3,rigor:3,ideal:2,solo:2,order:2,lone:1,humor:-2,social:-2},
+    brief:"受了宫刑，还是把《史记》写完了。",
+    copy:"为李陵说了句话，被处以宫刑，按当时的规矩这比死还难受。他没有辩解，也没有死，只是接着写，最后交出五十二万字、从黄帝写到当朝。你是那种认准一件事就能死磕很多年的人，不需要别人给你打气。你适合长周期、靠积累取胜的事，研究、写作、技术深耕都是你的赛道。小缺点：苦都自己咽，很少求助，容易把自己憋出问题；而且你不太会表达需要，别人以为你不需要支持。" },
+  { name:"玄奘", sub:"唐代 · 高僧", tags:["执行力恐怖","一个人也能走","不轻易改口"],
+    v:{grit:3,rigor:3,ideal:3,solo:2,order:2,prag:1,wild:-2,social:-2},
+    brief:"偷渡出境，一个人走到了印度。",
+    copy:"没拿到通关文牒就出发了，穿越沙漠、翻过雪山，走了五万里，在印度学了十几年，带回六百多部经，回来又翻译了二十年。他的执行力属于恐怖级别：确定目标之后，外界的劝阻基本无效。你跟他一样，一旦想清楚要什么，不太会因为反对声音改变。你适合有明确终点、可以拆解成步骤的长期任务。小缺点：太坚定，撞了墙也不太愿意拐弯，有时候会把「坚持」和「死磕」搞混，绕路在你看来像是认输。" },
+  { name:"李时珍", sub:"明代 · 医药学家", tags:["考据癖","不爱空谈","较真到轴"],
+    v:{rigor:3,prag:3,grit:2,curious:2,solo:2,aesth:-1,humor:-2,social:-1},
+    brief:"二十七年翻书八百种，写出《本草纲目》。",
+    copy:"他发现旧药书里错误太多，于是自己重来：读了八百多种书，走遍山野采药问药农，历时二十七年，三易其稿，写成一百九十万字的《本草纲目》。他是考据癖的祖师爷，不写完不罢休。你做事讲证据、不爱空谈，听到「据说」就想自己去查一遍。你适合需要严谨和责任的位置，医疗、法务、工程、研究都能发挥。小缺点：较真到有点轴，跟人争论会寸步不让；而且你对「差不多」的容忍度为零，容易让同事觉得难合作。" },
+  { name:"曹雪芹", sub:"清代 · 作家", tags:["体察极细","内心戏丰富","想得多动得少"],
+    v:{lone:3,feel:3,aesth:3,solo:2,curious:2,grit:2,prag:-2,social:-2},
+    brief:"从锦衣玉食到举家食粥，写了十年《红楼梦》。",
+    copy:"江宁织造家的公子，十几岁家道中落，晚年住在北京西郊，朋友说他「举家食粥酒常赊」，就在这个状态里写了十年，书没写完人就走了。他见过最好的，也扛过最差的，所以写人情冷暖写得极准。你对人和关系的体察特别细，能看出谁在硬撑、哪句话是客气。你适合做需要洞察的创造性工作。小缺点：想得多、动得少，容易陷在情绪里出不来；而且你对自己要求高到会拖着不动手，怕写出来的配不上脑子里的。" },
+  { name:"卓文君", sub:"汉代 · 才女", tags:["敢爱敢翻脸","情绪浓度高","不将就"],
+    v:{wild:2,feel:3,aesth:2,warm:2,rebel:2,humor:1,drive:1,order:-2},
+    brief:"敢跟着私奔，也敢写诗把人骂回来。",
+    copy:"夜里跟司马相如跑路，在临邛当垆卖酒也不觉得丢人；后来他有钱了想纳妾，她写《白头吟》「闻君有两意，故来相决绝」，硬是把人拉了回来。她感情上不将就，爱得起，也断得掉。你跟他一样，一旦投入就很满，对关系里的敷衍极其敏感。你适合有真实情感连接的工作和生活，纯事务性的日子会让你枯萎。小缺点：情绪浓度高，容易在关系里全情投入然后受伤；而且你翻脸很干脆，冷静下来偶尔也会想是不是话说重了。" },
+
+  { name:"达·芬奇", sub:"意大利 · 通才", tags:["好奇心本人","兴趣广泛","坑比成果多"], intl:1,
+    v:{curious:3,aesth:3,rigor:2,wild:2,solo:2,order:-2,prag:-1},
+    brief:"画画的同时研究解剖、飞行器和水利工程。",
+    copy:"他留下的笔记比画还多：人体解剖图、直升机草图、水力机械，还有一份详细的城市规划方案。蒙娜丽莎画了十几年没交稿，因为他对下一个问题更感兴趣。你是好奇心本身，兴趣广泛到有点发散，新东西一上手就停不下来。你适合能不断接触新领域的工作，纯重复的岗位会让你迅速失去活性。小缺点：开挖的坑比填上的多，很多事停在 80% 就被下一个 idea 勾走了；简历很好看，代表作却常常凑不齐。" },
+  { name:"梵高", sub:"荷兰 · 画家", tags:["感受强烈","不被理解","低谷很深"], intl:1,
+    v:{feel:3,lone:3,aesth:3,grit:2,solo:2,prag:-3,social:-2,order:-1},
+    brief:"生前只卖出一幅画，死后每张都过亿。",
+    copy:"他十年里画了八百多幅，活着的时候几乎没人懂，靠弟弟接济生活，最后在麦田里结束了自己的生命。他画的是自己眼里的世界——星空是流动的，向日葵是燃烧的，没人看懂也照画。你感受强烈、表达直接，常常觉得「我明明说得很清楚了，为什么没人懂」。你适合能让你直接表达的工作，创作、设计、手艺都行。小缺点：情绪起伏大，低谷期会很难熬；而且你不太会经营关系，身边人想靠近你却找不到门。" },
+  { name:"贝多芬", sub:"德国 · 作曲家", tags:["硬扛","越难越来劲","脾气硬"], intl:1,
+    v:{grit:3,rigor:2,solo:2,drive:2,ideal:2,prag:-1,humor:-2,calm:-2},
+    brief:"耳朵聋了，还是写出了《第九交响曲》。",
+    copy:"二十八岁开始耳鸣，四十五岁左右完全失聪，靠咬着木棍听钢琴震动继续作曲。首演结束时全场鼓掌，他听不见，是别人把他转过来他才知道。他是「硬扛」这个词本尊：命运掐住喉咙，他就写一首更大的。你骨子里不服输，越是别人说不行，你越来劲。你适合高压但有成就感的赛道，创业、攻坚、竞技都行。小缺点：脾气硬，容易跟人拧着，明明可以求助却宁可自己扛；而且你不太擅长庆祝，达成之后很快就开始焦虑下一个。" },
+  { name:"莫扎特", sub:"奥地利 · 作曲家", tags:["天才型","好玩有趣","生活废柴"], intl:1,
+    v:{aesth:3,humor:2,social:2,wild:2,curious:2,order:-2,prag:-2,rigor:-2},
+    brief:"五岁作曲，成年后一边写神作一边欠债。",
+    copy:"他写的曲子随便挑一首都是教科书级，但成年后常年缺钱、搬家搬了十几次，还爱写些粗俗玩笑的信。妻子说他「像小孩一样需要人照顾」。你是那种灵感充沛、很好玩的人，跟你在一起不无聊，脑子转得比嘴快。你适合有舞台、有反馈的工作，闷头干活会浪费你的天赋。小缺点：生活管理能力约等于零，钱和日程都容易失控；而且你太依赖状态，状态差的时候连最基本的事都拖着。" },
+  { name:"莎士比亚", sub:"英国 · 剧作家", tags:["看人极准","什么都敢写","通透"], intl:1,
+    v:{curious:3,aesth:3,feel:2,humor:2,social:2,prag:2,order:1,lone:1},
+    brief:"从演员到股东，把人间百态全写了一遍。",
+    copy:"他写国王也写小丑，写爱情也写谋杀，一个人贡献了英语里几百个常用词和成语。他不只是会写，还很会做生意：剧场股份、巡演、版权，一样没落下。你观察力强，看人很准，常常别人刚开口你就知道他要说什么。你适合需要洞察人性的工作，内容、营销、组织管理都能发挥。小缺点：看得太透，容易对人失望；而且你习惯旁观，真到自己进场的时候反而犹豫，因为你把每种结局都想过了。" },
+  { name:"居里夫人", sub:"波兰 / 法国 · 科学家", tags:["坐得住冷板凳","不喊口号","严肃"], intl:1,
+    v:{rigor:3,grit:3,solo:2,ideal:2,curious:2,prag:2,social:-2,humor:-2},
+    brief:"在漏雨的棚屋里熬了四年，从几吨沥青里提炼出镭。",
+    copy:"没有实验室，就在学校给的破棚屋里干：冬天冷、夏天闷，一锅一锅地熬，四年之后从几吨矿渣里提出零点一克镭。她不喊口号，只是每天去干活，两获诺贝尔奖，最后因为长期接触放射性物质而病倒。你能坐得住冷板凳，认定的事不靠热情、靠日复一日。你适合长周期、需要积累的方向，科研、工程、手艺、深耕型职业。小缺点：太严肃，别人想帮你也不知道怎么开口；而且你不擅长展示成果，明明做得多，却常常被会说的人拿走功劳。" },
+  { name:"爱因斯坦", sub:"德国 / 美国 · 物理学家", tags:["爱想大问题","不迷信权威","日常废柴"], intl:1,
+    v:{curious:3,ideal:2,rebel:2,solo:2,humor:2,aesth:1,order:-2,prag:-2},
+    brief:"专利局的小职员，业余时间推翻了物理学。",
+    copy:"二十六岁在伯尔尼专利局当三级技术员，白天审图纸，晚上想光速和時間，一年之内发了四篇改变物理学的论文。他说过一句被引用到烂的话：想象力比知识重要。你喜欢想大问题，对权威不感冒，别人讨论怎么做的时候，你在想为什么要这么做。你适合有思考空间的工作，被琐事填满会让你失去灵气。小缺点：日常生活能力一般，常常忘了今天星期几，家务和行程基本靠别人兜底；而且你想得深、动手慢，容易错过窗口。" },
+  { name:"牛顿", sub:"英国 · 科学家", tags:["较真记仇","几乎不笑","逻辑怪物"], intl:1,
+    v:{rigor:3,solo:3,curious:2,order:2,grit:2,social:-3,humor:-3,warm:-2},
+    brief:"躲瘟疫回了乡下，顺手搞出微积分和万有引力。",
+    copy:"伦敦大瘟疫期间学校关门，他回老家待了十八个月，把微积分、光学和万有引力都想出来了，后来自己说那是他创造力最强的时期。他一辈子几乎不笑，跟胡克、莱布尼茨争优先权争到死，终身未婚。你逻辑极强，能把混乱的事理成一条线，别人吵架你在算账。你适合需要严密推理的工作，钱和人情都不太能动摇你的判断。小缺点：不太合群，容易让人觉得难接近；而且你记性太好，别人一句冒犯你能记很多年。" },
+  { name:"尼古拉·特斯拉", sub:"塞尔维亚 / 美国 · 发明家", tags:["脑子里跑机器","纯粹理想主义","不谈钱"], intl:1,
+    v:{wild:3,curious:3,ideal:3,solo:2,rebel:2,prag:-3,order:-2,social:-2},
+    brief:"脑子里能直接跑出完整机器，最后欠债死在旅馆里。",
+    copy:"他能在脑子里把一台电机完整运转一遍，连零件磨损都算得出来，交流电系统就是这么来的。但他不会做生意：放弃专利分成、投资失败、晚年住在纽约旅馆里，靠喂鸽子度过。他是纯粹的理想主义者，脑子里有太多宏大的东西。你跟他一样，想象力远超落地能力。你适合有强执行者搭档的环境，一个人单打独斗容易卡在最后一步。小缺点：太不谈钱，总觉得谈钱不体面；而且你不签合同、不留证据，最后往往是别人摘果子。" },
+  { name:"爱迪生", sub:"美国 · 发明家", tags:["量产思维","能熬","结果导向"], intl:1,
+    v:{prag:3,grit:3,drive:2,rigor:2,social:2,ideal:-1,solo:-2,aesth:-1},
+    brief:"试了一千多种灯丝，他说那不是失败。",
+    copy:"为了找到合适的灯丝，他试了上千种材料；为了推广电灯，他连发电站和电网都一起建了。他名下有一千多项专利，本质上是把发明这件事工业化了。你务实、能熬、会组织资源，别人还在打磨方案的时候你已经做出能用的版本了。你适合需要交付和规模化的角色，创业、产品、运营都是你的地盘。小缺点：太看结果，容易忽略过程里的美和别人的感受；而且你不太能容忍试错，团队里的人会觉得压力大、不敢犯错。" },
+  { name:"海明威", sub:"美国 · 作家", tags:["硬汉","行动派","不爱示弱"], intl:1,
+    v:{grit:3,wild:2,prag:2,solo:2,humor:1,drive:2,warm:-1,calm:-2},
+    brief:"打仗、打猎、捕鱼，站着把小说写完了。",
+    copy:"一战开救护车、被炮弹炸伤，二战当战地记者，平时打猎捕鱼，写作时坚持站着写，说「坐在舒服的椅子上会写得松懈」。他留下那句：人可以被毁灭，但不能被打败。你行动力强，不爱废话，别人还在讨论方案你已经干了一半。你适合有明确任务、能立刻开工的事，长期研讨会把你逼疯。小缺点：不爱示弱，情绪只会往外倒、从不往里说；而且你习惯用忙碌盖住情绪，停下来的时候反而最难受。" },
+  { name:"卡夫卡", sub:"奥地利 · 作家", tags:["社恐祖师爷","内心戏满分","想太多不敢做"], intl:1,
+    v:{lone:3,feel:3,solo:3,rigor:2,prag:-1,social:-3,drive:-2,humor:-1},
+    brief:"白天上班，晚上写《变形记》，临终让朋友把稿子烧了。",
+    copy:"他在工伤保险局当职员，白天处理工伤案子，晚上写小说，写到凌晨。临终前托朋友把手稿全烧掉，朋友没照做，于是世界才有了《变形记》和《城堡》。他是社恐和内耗的祖师爷：内心戏极丰富，表面波澜不惊。你跟他一样，事情在脑子里已经演完十遍，现实里一步没动。你适合有清晰规则、不必频繁社交的工作。小缺点：想太多不敢做，机会就在眼前也迈不出去；而且你习惯预设最坏结果，于是干脆不开始，然后为「没开始」继续内耗。" },
+  { name:"弗吉尼亚·伍尔夫", sub:"英国 · 作家", tags:["内心世界丰富","精神空间重要","极敏感"], intl:1,
+    v:{feel:3,aesth:3,solo:2,curious:2,lone:2,social:-2,order:-2,prag:-2},
+    brief:"她主张每个女人都要有一间自己的房间。",
+    copy:"她写意识流，把一个人心里那些没说出口的波动全写了下来；也写下那句被引用了几十年的话：一个女人如果要写小说，必须有钱，还有一间属于自己的房间。她的一生都在和自己的精神状态搏斗。你内心世界丰富，很在意自己的精神空间，被打扰的时候会明显烦躁。你适合有独立空间、节奏自控的生活方式。小缺点：敏感度高，外界一点风吹草动就能影响一整天的状态；而且你不太求助，常常是一个人扛到撑不住。" },
+  { name:"王尔德", sub:"爱尔兰 · 作家", tags:["毒舌金句","审美一流","嘴快"], intl:1,
+    v:{humor:3,aesth:3,rebel:2,social:2,wild:2,feel:1,prag:-2,order:-2},
+    brief:"我没什么可说的，除了我的天才。",
+    copy:"金句批发商：「我们都身处沟渠，但仍有人仰望星空」「我能抵抗一切，除了诱惑」。他审美一流，戏剧写得漂亮，也因为太张扬和一段关系吃了官司、入狱两年，出来后没几年就穷困潦倒地去世了。你嘴快、脑子更快，毒舌是你的保护色，也是你交朋友的门票。你适合需要表达和审美的场合。小缺点：嘴上赢了，场面输了，事后要自己收拾残局；而且你太怕无聊，为了有趣会做一些其实不太划算的决定。" },
+  { name:"简·奥斯汀", sub:"英国 · 作家", tags:["清醒得有点冷","看人极准","情感克制"], intl:1,
+    v:{prag:3,feel:2,humor:2,rigor:2,solo:2,calm:1,social:-1,wild:-2},
+    brief:"没出过远门，把婚姻和钱算得清清楚楚。",
+    copy:"她一辈子生活在英格兰乡间，写了六部小说，开场第一句就常把收入和婚姻状况交代明白。她笔下的爱情从不脱离现实：喜欢归喜欢，钱还是要算的。你看人看事很理性，不容易被气氛带着走，别人感动的时候你在心里给风险打分。你适合需要判断力和条理的工作。小缺点：太清醒，容易显得疏离；而且你不轻易交付信任，别人想走近你会觉得有一层看不见的玻璃。" },
+  { name:"苏格拉底", sub:"古希腊 · 哲学家", tags:["抬杠祖师爷","爱追问","不轻易接受"], intl:1,
+    v:{curious:3,rigor:2,rebel:2,ideal:2,social:2,humor:1,prag:-2,order:-2},
+    brief:"天天在市场上拉人问问题，问到人家下不来台。",
+    copy:"他一个字没写，每天在市场上拉住人问：你说勇敢，那勇敢到底是什么？问到对方自相矛盾，然后说「我知道我一无所知」。最后被判死刑，朋友安排他逃走，他不逃，说要遵守城邦的法律。你爱追问，不轻易接受现成答案，别人说「一直都这样」的时候你会本能地问一句「为什么」。你适合需要思辨的工作，研究、咨询、产品、法务。小缺点：问得太多，容易让人烦，会议上你常常赢了逻辑输了气氛；而且你会把自己问进死胡同，想通了别人，想不通自己。" },
+  { name:"尼采", sub:"德国 · 哲学家", tags:["孤高","自我要求极高","难被安慰"], intl:1,
+    v:{lone:3,ideal:3,rebel:3,solo:3,grit:2,aesth:2,warm:-2,social:-3},
+    brief:"凡杀不死我的，使我更强大——他自己没扛住。",
+    copy:"他二十四岁当上教授，之后辞去教职四处漂泊，写了《查拉图斯特拉如是说》，宣告「上帝死了」，最后精神崩溃，在母亲和妹妹照料下度过最后十年。他一生孤独，思想锋利到自己都承受不住。你内心有极强的自我要求，孤独但骄傲，不太愿意降低标准去换取陪伴。你适合能靠自己完成、有深度的方向。小缺点：太孤高，很难真正走近别人，也很难被安慰——别人伸手的时候你会先退一步，然后说「我没事」。" },
+  { name:"笛卡尔", sub:"法国 · 哲学家", tags:["先建框架","条理清楚","想清楚才动"], intl:1,
+    v:{rigor:3,curious:3,solo:3,order:2,prag:1,social:-2,humor:-2,wild:-2},
+    brief:"先把一切都怀疑一遍，看看剩下什么。",
+    copy:"他躺在床上想：我能不能怀疑一切？感官会骗人，梦境分不清，数学也许是骗人的——但「有一个正在怀疑的我」这件事无法怀疑。于是有了「我思故我在」，也顺手发明了坐标系。你习惯先建立框架再行动，条理清楚，方案交出去别人一眼能看懂。你适合需要体系化思考的工作。小缺点：想清楚才动，容易错过窗口期；而且你受不了没章法的人，合作时会忍不住接管，然后发现自己干了两个人的活。" },
+  { name:"达尔文", sub:"英国 · 博物学家", tags:["慢工出细活","长期观察","不着急"], intl:1,
+    v:{curious:3,rigor:3,grit:3,solo:2,calm:2,prag:1,social:-2,drive:-2},
+    brief:"坐小船环球五年，回来又憋了二十年才发表。",
+    copy:"二十二岁上小猎犬号，五年环球航行，晕船晕了五年，采了几千份标本。回来之后想明白了自然选择，却憋了二十年不敢发表，直到有人要抢先才出手。他是慢工出细活的典范，用二十年换一本改变生物学的书。你有耐心，愿意长期观察积累，不急着下结论。你适合需要沉淀的方向，研究、写作、长期项目都能发挥。小缺点：太慢，想明白了机会可能已经过了；而且你不爱争功，明明是你先想到的，最后常常被更敢说的人先讲出来。" },
+  { name:"南丁格尔", sub:"英国 · 护士", tags:["心软手硬","有章法","责任感爆表"], intl:1,
+    v:{warm:3,order:3,grit:3,ideal:2,prag:2,rigor:2,wild:-2,humor:-2},
+    brief:"提着灯巡视病房，把死亡率从 42% 压到 2%。",
+    copy:"克里米亚战争期间她带队上前线，发现伤兵死亡主要不是因为枪伤，而是感染和脏。她清洗、通风、改善伙食，还画了那种现在叫「玫瑰图」的统计图表说服官员，几个月内把死亡率从四成压到百分之二。她既有同情心又有执行力，是少数两样都拉满的人。你心软但手硬，做事有章法，团队里你是那个既照顾人又能推进事的人。小缺点：太能扛责任，什么都往自己身上揽，明明已经很累了还觉得「再撑一下就好」。" },
+  { name:"伽利略", sub:"意大利 · 天文学家", tags:["用证据硬刚","讲事实","太刚"], intl:1,
+    v:{curious:3,rebel:3,rigor:3,grit:2,solo:1,prag:1,order:1,calm:-2},
+    brief:"认完错，据说还嘟囔了一句：可是它在动。",
+    copy:"他改造望远镜去看木星，发现有卫星在绕着木星转——这直接冲击了「所有天体都绕地球转」的说法。后来被叫去认错，传说他认完站起来小声说了一句「可是它确实在动」。他是用证据硬刚权威的人，哪怕代价是被软禁到去世。你讲事实，不屈服于多数，开会时别人都在附和你也会说「数据不是这样的」。你适合需要独立判断的位置。小缺点：太刚，明知要吃亏也要把话说完；而且你不太会给人台阶，赢了道理之后常常要自己承担关系成本。" },
+  { name:"莫奈", sub:"法国 · 画家", tags:["慢下来看","有耐心","沉浸在自己的节奏"], intl:1,
+    v:{aesth:3,calm:3,solo:2,feel:2,grit:2,curious:1,prag:-2,drive:-2},
+    brief:"同一个干草堆画了二十多遍，就为了画出光。",
+    copy:"他为了看不同时间的光，把干草堆、鲁昂大教堂、睡莲反复画了几十遍，晚年眼睛几乎失明，做了白内障手术后继续画，画出来的睡莲颜色都变了。他一辈子只做一件事：把光留下来。你有耐心，也懂得慢下来看，别人赶进度的时候你在观察细节。你适合节奏自洽、允许打磨的工作。小缺点：容易陷在自己的节奏里，外面的事反应慢半拍；而且你不太主动争取资源，常常是做得最好、拿得最少。" },
+  { name:"毕加索", sub:"西班牙 · 画家", tags:["讨厌被框住","创造力爆表","变化太快"], intl:1,
+    v:{wild:3,aesth:3,rebel:3,curious:2,drive:2,social:2,order:-3,calm:-2},
+    brief:"蓝色时期、立体主义、超现实，画风一变再变。",
+    copy:"他十几岁就画得跟古典大师一样好，然后立刻把那套扔了。蓝色时期、玫瑰时期、立体主义、超现实，一生留下两万多件作品，从来没有重复自己。他不允许别人定义自己，也无法忍受被定义。你跟他一样，讨厌被框住，创造力强，一段时间不变就会难受。你适合能不断重新开始的工作，被要求稳定输出一种风格会让你窒息。小缺点：变化太快，身边的人跟不上，关系容易被磨损；而且你推倒重来的时候不太顾惜已有成果，包括别人的。" },
+  { name:"可可·香奈儿", sub:"法国 · 设计师", tags:["有主见","会赚钱","不允许自己软弱"], intl:1,
+    v:{drive:3,aesth:3,prag:3,rebel:2,rigor:1,solo:1,warm:-2,calm:-2},
+    brief:"从孤儿院到时装帝国，小黑裙是她给的。",
+    copy:"母亲早逝、父亲把她送进修道院孤儿院，她从帽子店起步，做女装、做香水、做品牌，把女性从紧身胸衣里解放出来，让简洁变成一种高级。她很清楚自己要什么，也很清楚钱的重要性。你有主见、有野心、审美在线，别人还在犹豫的时候你已经在算账了。你适合有上升空间、能自己说了算的事。小缺点：太强，很少允许自己软弱，累了也说没事；而且你对依赖别人有本能的警惕，有时候会把靠近你的人推开。" },
+  { name:"卓别林", sub:"英国 · 喜剧大师", tags:["用幽默化解","心很软","自己的难过没人知道"], intl:1,
+    v:{humor:3,warm:3,feel:3,grit:2,aesth:2,prag:1,lone:1,drive:-1},
+    brief:"流浪汉的扮相逗笑了全世界，他自己的童年穷到进过孤儿院。",
+    copy:"父亲早亡、母亲精神失常，他小时候进过孤儿院，后来却用那个流浪汉的形象让全世界大笑。《城市之光》结尾，卖花女认出他的那一幕，被很多人评为影史最动人的镜头。你擅长用幽默化解尴尬，嘴上开着玩笑，心却是软的。你适合需要连接人和情绪的工作。小缺点：习惯逗别人笑，自己的难过反而没人知道；而且你不愿意给别人添麻烦，常常是把别人逗乐了，回家自己消化。" }
+];
+
+/* ================= 匹配模型 ================= */
+/* SCORE_START */
+const TRAITS = ["ideal","prag","solo","social","order","wild","grit","curious","warm","rebel",
+  "drive","calm","feel","aesth","lone","humor","rigor","intl"];
+
+/* 双中心化：结果减去"平均结果"，用户减去"随机作答期望值"，只比较各自的独特性。
+   不做这一步，结果会严重倾斜到"各项都还行"的人身上。 */
+const CITY_MEAN = {};
+TRAITS.forEach(k=>{ let s=0; CITIES.forEach(c=> s += (c.v[k]||0)); CITY_MEAN[k] = s/CITIES.length; });
+const CITY_C = CITIES.map(c=>{ const o={}; TRAITS.forEach(k=> o[k] = (c.v[k]||0) - CITY_MEAN[k]); return o; });
+
+const USER_MEAN = {};
+TRAITS.forEach(k=>{ let s=0; QUESTIONS.forEach(q=>{ let a=0; q.o.forEach(o=> a += (o.w[k]||0)); s += a/q.o.length; }); USER_MEAN[k]=s; });
+
+/* 硬门槛：中国/世界不是偏好而是约束，必须单独加减分，否则会出现
+   "明确选了中国却算出世界人物"。 */
+function regionGate(u, c){
+  const w = u.intl || 0;
+  if(w < 0) return c.intl ? -0.52 : 0.06;   // 明确选中国
+  if(w === 2) return c.intl ? 0.04 : -0.04; // 轻微偏向世界
+  if(w >= 3) return c.intl ? 0.09 : -0.52;  // 明确选世界
+  return 0;                                  // 都行
+}
+/* 相似度 → 展示百分比。调参目标：随机作答时均值落在 85% 上下 */
+function pctOf(sim){ return Math.max(72, Math.min(97, Math.round(58 + sim*44))); }
+
+function computeScores(answers){
+  const u = {};
+  answers.forEach((a,i)=>{ if(a<0) return; const w = QUESTIONS[i].o[a].w; for(const k in w) u[k]=(u[k]||0)+w[k]; });
+  const uc = {}; let nu = 0;
+  TRAITS.forEach(k=>{ uc[k] = (u[k]||0) - USER_MEAN[k]; nu += uc[k]*uc[k]; });
+  nu = Math.sqrt(nu) || 1;
+  return CITY_C.map((cc,i)=>{
+    let dot=0, nc=0;
+    TRAITS.forEach(k=>{ dot += uc[k]*cc[k]; nc += cc[k]*cc[k]; });
+    const sim = dot/(nu*(Math.sqrt(nc)||1));
+    return { i, sim: sim + regionGate(u, CITIES[i]) + i*1e-6 };
+  }).sort((a,b)=>b.sim-a.sim);
+}
+/* SCORE_END */
+
+/* ================= 解锁 ================= */
+const UNLOCK_CODE = "HISTORY2026";
+const LS_KEY = "hist_figure_unlocked_v1";
+let unlocked = false;
+try { unlocked = localStorage.getItem(LS_KEY) === "1"; } catch(e) { unlocked = false; }
+
+/* ================= 交互 ================= */
+let idx = 0;
+let answers = new Array(QUESTIONS.length).fill(-1);
+let current = null;
+const $ = id => document.getElementById(id);
+const cover = $("s-cover"), quiz = $("s-quiz"), result = $("s-result");
+
+function show(el){
+  [cover,quiz,result].forEach(e=>{ e.classList.add("hide"); e.classList.remove("in"); });
+  el.classList.remove("hide");
+  el.classList.add("fade");
+  requestAnimationFrame(()=>el.classList.add("in"));
+  window.scrollTo(0,0);
+}
+
+function applyLock(){
+  const q = $("r-quote"), box = $("lockbox"), note = $("oknote");
+  if(unlocked){
+    q.classList.remove("locked");
+    box.classList.add("hide");
+    note.classList.remove("hide");
+    note.style.display = "block";
+  }else{
+    q.classList.add("locked");
+    box.classList.remove("hide");
+    note.classList.add("hide");
+    note.style.display = "none";
+  }
+}
+
+function renderQ(){
+  const q = QUESTIONS[idx];
+  $("qnum").textContent = String(idx+1).padStart(2,"0") + " / " + String(QUESTIONS.length).padStart(2,"0");
+  $("qbar").style.width = ((idx+1)/QUESTIONS.length*100) + "%";
+  $("qtitle").textContent = q.q;
+  $("btn-prev").classList.toggle("hide", idx===0);
+  $("btn-back").classList.toggle("hide", idx===0);
+  const box = $("opts");
+  box.innerHTML = "";
+  q.o.forEach((op,i)=>{
+    const d = document.createElement("div");
+    d.className = "opt" + (answers[idx]===i ? " on" : "");
+    d.innerHTML = '<span class="dot"></span><span class="txt"></span>';
+    d.querySelector(".txt").textContent = op.t;
+    d.onclick = ()=>{
+      answers[idx] = i;
+      [...box.children].forEach(c=>c.classList.remove("on"));
+      d.classList.add("on");
+      $("btn-next").disabled = false;
+    };
+    box.appendChild(d);
+  });
+  $("btn-next").disabled = answers[idx] < 0;
+  $("btn-next").textContent = idx===QUESTIONS.length-1 ? "看看我的结果" : "下一题";
+  window.scrollTo(0,0);
+}
+
+function renderResult(){
+  const list = computeScores(answers);
+  const top = CITIES[list[0].i];
+  current = top;
+  $("r-city").textContent = top.name;
+  $("r-sub").textContent = top.sub;
+  $("r-pill").textContent = "匹配度 " + pctOf(list[0].sim) + "%";
+  $("r-tags").innerHTML = top.tags.map(t=>"<span>"+t+"</span>").join("");
+  $("r-brief").textContent = top.brief;
+  $("r-copy").textContent = top.copy;
+  $("r-alt").innerHTML = list.slice(1,3).map(x=>{
+    const c = CITIES[x.i];
+    return '<div class="row"><b>'+c.name+'</b><i>'+pctOf(x.sim)+'% · '+c.tags[0]+'</i></div>';
+  }).join("");
+  $("lk-err").textContent = "";
+  $("r-code").value = "";
+  applyLock();
+  show(result);
+}
+
+$("btn-start").onclick = ()=>{ idx=0; answers.fill(-1); renderQ(); show(quiz); };
+$("btn-next").onclick = ()=>{
+  if(answers[idx]<0) return;
+  if(idx === QUESTIONS.length-1){ renderResult(); return; }
+  idx++; renderQ();
+};
+$("btn-prev").onclick = goBack;
+$("btn-back").onclick = goBack;
+function goBack(){ if(idx>0){ idx--; renderQ(); } }
+$("btn-again").onclick = ()=>{ idx=0; answers.fill(-1); show(cover); };
+
+$("btn-unlock").onclick = ()=>{
+  const v = ($("r-code").value || "").trim().toUpperCase().replace(/\s+/g,"");
+  if(!v){ $("lk-err").textContent = "请输入解锁码"; return; }
+  if(v === UNLOCK_CODE){
+    unlocked = true;
+    try { localStorage.setItem(LS_KEY, "1"); } catch(e) {}
+    applyLock();
+    toast("解锁成功");
+  }else{
+    $("lk-err").textContent = "解锁码不对，检查一下有没有输错";
+  }
+};
+
+function toast(msg){
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1800);
+}
+$("btn-copy").onclick = ()=>{
+  const c = current;
+  const txt = unlocked && c
+    ? "我是「" + c.name + "」型人格\n" + c.brief + "\n" + c.copy
+    : "我是「" + $("r-city").textContent + "」型人格\n" + $("r-brief").textContent + "\n（完整解读已解锁后可见）";
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast("文案已复制")).catch(()=>toast("复制失败，可长按选中文字"));
+  }else{
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); toast("文案已复制"); }catch(e){ toast("复制失败"); }
+    document.body.removeChild(ta);
+  }
+};
+</script>
+</body>
+</html>
